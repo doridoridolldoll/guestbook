@@ -42,8 +42,7 @@ public class GuestbookController {
   public String registerPost(GuestbookDTO dto, RedirectAttributes ra) {
     log.info("dto..." + dto);
     Long gno = gbService.register(dto);
-    ra.addFlashAttribute("msg", gno);
-
+    ra.addFlashAttribute("msg", gno + " 등록");
     return "redirect:/guestbook/list"; // redirect로 주소로 보냄 없으면 resource로
   }
 
@@ -61,7 +60,7 @@ public class GuestbookController {
       @ModelAttribute("requsetDTO") PageRequestDTO requestDTO, RedirectAttributes ra) {
     log.info("modifyPost..." + dto);
     gbService.modify(dto);
-    ra.addFlashAttribute("msg", dto.getGno()+"");
+    ra.addFlashAttribute("msg", dto.getGno()+" 수정");
     ra.addAttribute("page", requestDTO.getPage());
     ra.addAttribute("gno", dto.getGno());
     return "redirect:/guestbook/read";
@@ -71,7 +70,7 @@ public class GuestbookController {
   public String remove(long gno, RedirectAttributes ra, PageRequestDTO requsetDTO) {
     log.info("remove... " + gno);
     gbService.remove(gno);
-    ra.addFlashAttribute("msg", gno);
+    ra.addFlashAttribute("msg", gno+ " 삭제");
     ra.addAttribute("page", requsetDTO.getPage());
     return "redirect:/guestbook/list";
   }
