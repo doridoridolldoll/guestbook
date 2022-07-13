@@ -1,7 +1,9 @@
 package org.zerock.guestbook.service;
 
+import java.util.Optional;
 import java.util.function.Function;
 
+import org.apache.catalina.startup.ClassLoaderFactory.Repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,6 +25,16 @@ public class GuestbookServiceImpl implements GuestbookService {
   private final GuestbookRepository gbRepository; // final이 붙으면 무조건 초기화를 해줘야 한다  // proxy객체와의 순환참조를 막기 위해서 final
 
   @Override
+  public GuestbookDTO read(Long gno) {
+    Optional<Guestbook> result = gbRepository.findById(gno);
+    return result.isPresent()? entityToDTO(result.get()) : null;
+    // if(result.isPresent()) {
+    //   GuestbookDTO dto = entityToDTO(result.get());
+    //   return dto;
+    // }
+    // return null;
+  }
+  @Override
   public Long register(GuestbookDTO dto) {
     log.info("register dto"+dto);
     Guestbook entity = dtoToEntity(dto); // null
@@ -42,7 +54,22 @@ public class GuestbookServiceImpl implements GuestbookService {
     };
     return new PageResultDTO<>(result, fn);
   }
-
+  @Override
+  public void remove(Long gno) {
+    log.info("remove......" + gno);
+    gbRepository.deleteById(gno);
+  }
+  @Override
+  public void modify(GuestbookDTO dto) {
+    // dto를 먼저 들고오는 이유: Entity가 있어야 부분 변경이 가능.
+    Optional<Guestbook> result = gbRepository.findById(dto.getGno());
+    if(result.isPresent()) {
+      Guestbook entity = result.get();
+      entity.changeTitle(dto.getTitle());// 부분만 바꿈
+      entity.changeContent(dto.getContent()); // 부분만 바꿈
+      gbRepository.save(entity);
+    }
+  }
   // @RequiredArgsConstructor이 생성한 생성자
   // 복수개면 자동으로 @Autowired
   // public GuestbookServiceImpl(GuestbookRepository gbRepository)
