@@ -57,21 +57,25 @@ public class GuestbookController {
 
   @PostMapping("/modify")
   public String modifyPost(GuestbookDTO dto,
-      @ModelAttribute("requsetDTO") PageRequestDTO requestDTO, RedirectAttributes ra) {
+      PageRequestDTO requestDTO, RedirectAttributes ra) {
     log.info("modifyPost..." + dto);
     gbService.modify(dto);
     ra.addFlashAttribute("msg", dto.getGno()+" 수정");
-    ra.addAttribute("page", requestDTO.getPage());
     ra.addAttribute("gno", dto.getGno());
+    ra.addAttribute("page", requestDTO.getPage());
+    ra.addAttribute("type", requestDTO.getType());
+    ra.addAttribute("keyword", requestDTO.getKeyword());
     return "redirect:/guestbook/read";
   }
 
   @PostMapping("/remove")
-  public String remove(long gno, RedirectAttributes ra, PageRequestDTO requsetDTO) {
+  public String remove(long gno, RedirectAttributes ra, PageRequestDTO requestDTO) {
     log.info("remove... " + gno);
     gbService.remove(gno);
     ra.addFlashAttribute("msg", gno+ " 삭제");
-    ra.addAttribute("page", requsetDTO.getPage());
+    ra.addAttribute("page", requestDTO.getPage());
+    ra.addAttribute("type", requestDTO.getType());
+    ra.addAttribute("keyword", requestDTO.getKeyword());
     return "redirect:/guestbook/list";
   }
 }

@@ -14,6 +14,8 @@ import lombok.Data;
 public class PageRequestDTO { // which page, 어떤 페이지를 요청
   private int page;
   private int size;
+  private String type;
+  private String keyword;
 
   public PageRequestDTO() {
     page = 1;

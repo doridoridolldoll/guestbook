@@ -16,22 +16,34 @@ public class GuestbookServiceTests {
   @Test
   void testRegister() {
     GuestbookDTO dto = GuestbookDTO.builder().title("Sample Title...")
-                        .content("Sample Content...").writer("user0").build();
-    System.out.println("gno ::: "+service.register(dto));
+        .content("Sample Content...").writer("user0").build();
+    System.out.println("gno ::: " + service.register(dto));
   }
+
   @Test
   public void testList() {
     PageRequestDTO requestDTO = PageRequestDTO.builder().page(1).size(10).build();
     PageResultDTO<GuestbookDTO, Guestbook> resultDTO = service.getList(requestDTO);
-    System.out.println("PREV: "+resultDTO.isPrev());
-    System.out.println("NEXT: "+resultDTO.isNext());
-    System.out.println("TOTAL: "+resultDTO.getTotalPage());
+    resultDTOPrint(resultDTO);
+  }
+
+  @Test
+  public void testSearch() {
+    PageRequestDTO requestDTO = PageRequestDTO.builder()
+        .page(1).size(10).type("c").keyword("1").build();
+    PageResultDTO<GuestbookDTO, Guestbook> resultDTO = service.getList(requestDTO);
+    resultDTOPrint(resultDTO);
+  }
+
+  public void resultDTOPrint(PageResultDTO<GuestbookDTO, Guestbook> resultDTO) {
+    System.out.println("PREV: " + resultDTO.isPrev());
+    System.out.println("NEXT: " + resultDTO.isNext());
+    System.out.println("TOTAL: " + resultDTO.getTotalPage());
     System.out.println("---------------------------------");
-    for(GuestbookDTO dto : resultDTO.getDtoList()) {
+    for (GuestbookDTO dto : resultDTO.getDtoList()) {
       System.out.println(dto);
     }
     System.out.println("=================================");
     resultDTO.getPageList().forEach(i -> System.out.println(i));
-
   }
 }
