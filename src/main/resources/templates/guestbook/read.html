@@ -56,10 +56,10 @@
     <script th:inline="javascript">
       window.onload = function() {
         var msg = /*[[${msg}]]*/'msg';
-        const gno = msg.split(" ")[0]; // 글 번호
-        const noti = msg.split(" ")[1]; // 문자열
         console.log(msg);
         if (msg) {
+          const gno = msg.split(" ")[0]; // 글 번호
+          const noti = msg.split(" ")[1]; // 문자열
           // var myModal = new bootstrap.Modal(document.getElementById('myModal'));
           var myModal = new bootstrap.Modal(document.getElementById('myModal')
                           , { backdrop: true });
