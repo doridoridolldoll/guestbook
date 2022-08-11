@@ -60,6 +60,11 @@
     <script th:inline="javascript">
       window.onload = function () {
         var msg = /*[[${msg}]]*/'msg';
+        checkModal(msg);
+        history.replaceState({},null,null)
+        function checkModal(msg){
+          if(msg === '' || history.state) return;
+        }
         console.log(msg);
         if (msg) {
           const gno = msg.split(" ")[0]; // 글 번호
